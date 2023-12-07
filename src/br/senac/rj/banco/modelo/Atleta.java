@@ -9,7 +9,8 @@ public class Atleta {
 	private int id;
 	private String nome;
 	private int idade;	
-	protected double altura;
+	private double altura;
+	private int ginasio;
 	public static int totalAtletas;
 
 
@@ -56,14 +57,22 @@ public class Atleta {
 		this.altura = altura;
 	}
 	
-	public boolean cadastrarAtleta(int id, String nome, int idade, double altura) {
+	public int getGinasio() {
+		return ginasio;
+	}
+
+	public void setGinasio(int ginasio) {
+		this.ginasio = ginasio;
+	}
+
+	public boolean cadastrarAtleta(int id, String nome, int idade, double altura, int ginasio) {
 		// Define a conexão
 		Connection conexao = null;
 		try {
 			conexao = Conexao.conectaBanco();
 			
 			// Define a consulta
-			String sql = "insert into atleta set id=?, nome=?, idade=?, altura=?;";
+			String sql = "insert into atleta set id=?, nome=?, idade=?, altura=?, ginasio_id=?;";
 			
 			// Prepara a consulta
 			PreparedStatement ps = conexao.prepareStatement(sql);
@@ -73,6 +82,7 @@ public class Atleta {
 			ps.setString(2, nome); // Substitui o primeiro parâmetro da consulta pelo nome informado
 			ps.setInt(3, idade); // Substitui o segundo parâmetro da consulta pela idade informada
 			ps.setDouble(4, altura); // Substitui o terceiro parâmetro da consulta pela altura informada
+			ps.setInt(5, ginasio); // Substitui o terceiro parâmetro da consulta pelo ginásio informada
 			int totalRegistrosAfetados = ps.executeUpdate();
 			if (totalRegistrosAfetados == 0) {
 				System.out.println("Não foi feito o cadastro!!");
@@ -89,43 +99,71 @@ public class Atleta {
 	}
 
 	public boolean consultarAtleta(int id) {
-		// Define a conexão
-		Connection conexao = null;
-		try {
-			conexao = Conexao.conectaBanco();
-			// Define a consulta
-			String sql = "select * from atleta where id=?";
-			
-			// Prepara a consulta
-			PreparedStatement ps = conexao.prepareStatement(sql);
-			
-			// Define os parâmetros da consulta
-			ps.setInt(1, id); // Substitui o primeiro parâmetro da consulta pelo id informado
-			
-			// Executa a consulta, resultando em um objeto da classe ResultSet
-			ResultSet rs = ps.executeQuery();
-			if (!rs.isBeforeFirst()) { // Verifica se não está antes do primeiro registro
-				System.out.println("Atleta não cadastrado!");
-				return false; // Atleta não cadastrado
-			} else {
-				// Efetua a leitura do registro da tabela
-				while (rs.next()) {
-//					this.id = rs.getInt("id");
-					this.nome = rs.getString("nome");
-					this.idade = rs.getInt("idade");
-					this.altura = rs.getDouble("altura");
-				}
-				return true;
-			}
-		} catch (SQLException erro) {
-			System.out.println("Erro ao consultar o Atleta: " + erro.toString());
-			return false;
-		} finally {
-			Conexao.fechaConexao(conexao);
-		}
+	    Connection conexao = null;
+	    try {
+	        conexao = Conexao.conectaBanco();
+	        String sql = "SELECT a.*, g.nome AS nome_ginasio " +
+	                     "FROM atleta a " +
+	                     "JOIN ginasio g ON a.ginasio_id = g.id " +
+	                     "WHERE a.id=?";
+	        
+	        PreparedStatement ps = conexao.prepareStatement(sql);
+	        ps.setInt(1, id);
+	        
+	        ResultSet rs = ps.executeQuery();
+	        if (!rs.isBeforeFirst()) {
+	            System.out.println("Atleta não cadastrado!");
+	            return false;
+	        } else {
+	            while (rs.next()) {
+	                this.nome = rs.getString("nome");
+	                this.idade = rs.getInt("idade");
+	                this.altura = rs.getDouble("altura");
+	                this.ginasio = rs.getInt("ginasio_id");
+	            }
+	            return true;
+	        }
+	    } catch (SQLException erro) {
+	        System.out.println("Erro ao consultar o Atleta: " + erro.toString());
+	        return false;
+	    } finally {
+	        Conexao.fechaConexao(conexao);
+	    }
+	}
+	
+	public String consultarNomeGinasio(int id) {
+	    Connection conexao = null;
+	    try {
+	        conexao = Conexao.conectaBanco();
+	        String sql = "SELECT g.nome AS nome_ginasio " +
+	                     "FROM atleta a " +
+	                     "JOIN ginasio g ON a.ginasio_id = g.id " +
+	                     "WHERE a.id=?";
+	        
+	        PreparedStatement ps = conexao.prepareStatement(sql);
+	        ps.setInt(1, id);
+	        
+	        ResultSet rs = ps.executeQuery();
+	        if (!rs.isBeforeFirst()) {
+	            System.out.println("Atleta não cadastrado!");
+	            return ""; // Retorna uma string vazia se o atleta não for encontrado
+	        } else {
+	            if (rs.next()) {
+	                return rs.getString("nome_ginasio"); // Retorna o nome do ginásio encontrado
+	            }
+	            return ""; // Retorna uma string vazia se o atleta não for encontrado
+	        }
+	    } catch (SQLException erro) {
+	        System.out.println("Erro ao consultar o Atleta: " + erro.toString());
+	        return ""; // Retorna uma string vazia em caso de erro
+	    } finally {
+	        Conexao.fechaConexao(conexao);
+	    }
 	}
 
-	public boolean atualizarAtleta(int id, String nome, int idade, double altura) {
+
+
+	public boolean atualizarAtleta(int id, String nome, int idade, double altura, int ginasio) {
 		if (!consultarAtleta(id))
 			return false;
 		else {
@@ -136,7 +174,7 @@ public class Atleta {
 				conexao = Conexao.conectaBanco();
 				
 				// Define a consulta
-				String sql = "update atleta set nome=?, idade=?, altura=? where id=?";
+				String sql = "update atleta set nome=?, idade=?, altura=?, ginasio_id=? where id=?";
 				
 				// Prepara a consulta
 				PreparedStatement ps = conexao.prepareStatement(sql);
@@ -146,6 +184,7 @@ public class Atleta {
 				ps.setInt(2, idade);
 				ps.setDouble(3, altura);
 				ps.setInt(4, id);
+				ps.setInt(5, ginasio);
 				int totalRegistrosAfetados = ps.executeUpdate();
 				if (totalRegistrosAfetados == 0)
 					System.out.println("Não foi feita a atualização!");

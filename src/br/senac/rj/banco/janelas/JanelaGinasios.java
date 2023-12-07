@@ -31,7 +31,6 @@ public class JanelaGinasios {
 		JLabel labelEstado = new JLabel("Estado: ");
 		JLabel labelMunicipio = new JLabel("Municipio: ");
 		
-	
 		// Posiciona os labels na janela
 		labelId.setBounds(50, 40, 100, 20); // coluna, linha, largura, tamanho
 		labelNome.setBounds(50, 80, 150, 20); // coluna, linha, largura, tamanho
@@ -155,6 +154,7 @@ public class JanelaGinasios {
 				}
 			}
 		});
+		
 		botaoLimpar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				jTextId.setText(""); // Limpar campo

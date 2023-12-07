@@ -31,7 +31,6 @@ public class JanelaCampeonatos {
 		JLabel labelCategoria = new JLabel("Categoria: ");
 		JLabel labelDivisao = new JLabel("Divisão: ");
 		
-	
 		// Posiciona os labels na janela
 		labelId.setBounds(50, 40, 100, 20); // coluna, linha, largura, tamanho
 		labelNome.setBounds(50, 80, 150, 20); // coluna, linha, largura, tamanho
@@ -155,6 +154,7 @@ public class JanelaCampeonatos {
 				}
 			}
 		});
+		
 		botaoLimpar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				jTextId.setText(""); // Limpar campo
