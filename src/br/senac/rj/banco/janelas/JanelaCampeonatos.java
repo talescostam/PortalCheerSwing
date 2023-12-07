@@ -19,7 +19,7 @@ public class JanelaCampeonatos {
 		JFrame janelaCampeonatos = new JFrame("Atualização de Ginasios"); // Janela Normal
 		janelaCampeonatos.setResizable(false); // A janela não poderá ter o tamanho ajustado
 		janelaCampeonatos.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		janelaCampeonatos.setSize(400, 300); // Define tamanho da janela
+		janelaCampeonatos.setSize(600, 300); // Define tamanho da janela
 		
 		// Define o layout da janela
 		Container caixa = janelaCampeonatos.getContentPane();
@@ -51,9 +51,9 @@ public class JanelaCampeonatos {
 		
 		// Posiciona os input box
 		jTextId.setBounds(180, 40, 50, 20);
-		jTextNome.setBounds(180, 80, 150, 20);
-		jTextCategoria.setBounds(180, 120, 150, 20);
-		jTextDivisao.setBounds(180, 160, 150, 20);
+		jTextNome.setBounds(180, 80, 350, 20);
+		jTextCategoria.setBounds(180, 120, 170, 20);
+		jTextDivisao.setBounds(180, 160, 170, 20);
 		
 		// Adiciona os rótulos e os input box na janela
 		janelaCampeonatos.add(labelId);
@@ -67,7 +67,7 @@ public class JanelaCampeonatos {
 		
 		// Define botões e a localização deles na janela
 		JButton botaoConsultar = new JButton("Consultar");
-		botaoConsultar.setBounds(230, 40, 100, 20);
+		botaoConsultar.setBounds(250, 40, 100, 20);
 		janelaCampeonatos.add(botaoConsultar);
 		JButton botaoGravar = new JButton("Gravar");
 		botaoGravar.setBounds(50, 200, 100, 20);
@@ -133,7 +133,7 @@ public class JanelaCampeonatos {
 						jTextNome.requestFocus();
 					} else {
 						if (!campeonato.consultarCampeonato(id)) {
-							if (!campeonato.cadastrarCampeonato(nome, categoria, divisao))
+							if (!campeonato.cadastrarCampeonato(id, nome, categoria, divisao))
 								JOptionPane.showMessageDialog(janelaCampeonatos, "Erro na inclusão do Atleta!");
 							else
 								JOptionPane.showMessageDialog(janelaCampeonatos, "Inclusão realizada!");

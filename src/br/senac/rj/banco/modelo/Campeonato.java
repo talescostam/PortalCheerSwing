@@ -61,22 +61,23 @@ public class Campeonato {
 		this.divisao = divisao;
 	}
 	
-	public boolean cadastrarCampeonato(String nome, String categoria, String divisao) {
+	public boolean cadastrarCampeonato(int id, String nome, String categoria, String divisao) {
 		// Define a conexão
 		Connection conexao = null;
 		try {
 			conexao = Conexao.conectaBanco();
 			
 			// Define a consulta
-			String sql = "insert into campeonato set nome=?, categoria=?, divisao=?;";
+			String sql = "insert into campeonato set id=?, nome=?, categoria=?, divisao=?;";
 			
 			// Prepara a consulta
 			PreparedStatement ps = conexao.prepareStatement(sql);
 			
 			// Define os parâmetros da consulta
-			ps.setString(1, nome);
-			ps.setString(2, categoria);
-			ps.setString(3, divisao);
+			ps.setInt(1, id);
+			ps.setString(2, nome);
+			ps.setString(3, categoria);
+			ps.setString(4, divisao);
 			int totalRegistrosAfetados = ps.executeUpdate();
 			if (totalRegistrosAfetados == 0) {
 				System.out.println("Não foi feito o cadastro!!");
@@ -139,7 +140,7 @@ public class Campeonato {
 				conexao = Conexao.conectaBanco();
 				
 				// Define a consulta
-				String sql = "update campeonato set id =? nome=?, categoria=?, divisao=? where id=?";
+				String sql = "update campeonato set id =?, nome=?, categoria=?, divisao=? where id=?";
 				
 				// Prepara a consulta
 				PreparedStatement ps = conexao.prepareStatement(sql);
