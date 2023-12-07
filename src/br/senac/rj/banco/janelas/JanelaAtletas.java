@@ -21,6 +21,8 @@ public class JanelaAtletas {
 		janelaAtletas.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		janelaAtletas.setSize(600, 350); // Define tamanho da janela
 		
+		ConfiguracaoLogo.definirIcone(janelaAtletas);
+		
 		// Define o layout da janela
 		Container caixa = janelaAtletas.getContentPane();
 		caixa.setLayout(null);

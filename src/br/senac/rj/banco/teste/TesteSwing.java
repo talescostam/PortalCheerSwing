@@ -1,10 +1,14 @@
 package br.senac.rj.banco.teste;
 
+import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
-import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -13,6 +17,7 @@ import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
 import br.senac.rj.banco.janelas.BackgroundPanel;
+import br.senac.rj.banco.janelas.ConfiguracaoLogo;
 import br.senac.rj.banco.janelas.HyperLinkInMenuBar;
 import br.senac.rj.banco.janelas.JanelaAtletas;
 import br.senac.rj.banco.janelas.JanelaCampeonatos;
@@ -30,11 +35,7 @@ public class TesteSwing {
 		UIManager.put("OptionPane.yesButtonText", "Sim"); 
 		UIManager.put("OptionPane.noButtonText", "Não");
 				
-        // Carrega a imagem que será usada como ícone da janela
-        ImageIcon icon = new ImageIcon("src\\images\\logo.png"); // Insira o caminho para o seu ícone
-        
-        // Define o ícone da janela
-        janelaPrincipal.setIconImage(icon.getImage());
+		ConfiguracaoLogo.definirIcone(janelaPrincipal);
         
         // Cria um painel com a imagem de fundo
         BackgroundPanel panel = new BackgroundPanel("src\\images\\banner PC.jpg"); // Insira o caminho para a sua imagem
@@ -117,10 +118,26 @@ public class TesteSwing {
 		});
 		janelaPrincipal.setVisible(true);
 		
+		JButton botaoInstagram = new JButton("Instagram");
+        botaoInstagram.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                abrirInstagram();
+            }
+        });
+        botaoInstagram.setBounds(140, 150, 100, 30); // Define a posição e tamanho do botão
+        panel.add(botaoInstagram); // Adiciona o botão ao painel
+
 		
 	}
 	
-	
+	private static void abrirInstagram() {
+        String urlInstagram = "https://www.instagram.com/portalcheer/";
+        try {
+            Desktop.getDesktop().browse(new URI(urlInstagram));
+        } catch (IOException | URISyntaxException ex) {
+            ex.printStackTrace();
+        }
+    }
 	
 	public static void main(String[] args) {
 		apresentarMenu();

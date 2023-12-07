@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class Atleta {
 	private int id;
@@ -225,5 +226,55 @@ public class Atleta {
 	        Conexao.fechaConexao(conexao);
 	    }
 	}
+	
+	public static ArrayList<String> obterNomesGinasiosDoBanco() {
+        ArrayList<String> nomesGinasios = new ArrayList<>();
+        Connection conexao = null;
+        try {
+        	conexao = Conexao.conectaBanco();
+        	
+            String sql = "SELECT nome FROM ginasio"; 
+
+            PreparedStatement ps = conexao.prepareStatement(sql);
+            
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                String nomeGinasio = rs.getString("nome");
+                nomesGinasios.add(nomeGinasio);
+            }
+        } catch (SQLException erro) {
+	        System.out.println("Erro ao consultar o Atleta: " + erro.toString());
+	    } finally {
+	        Conexao.fechaConexao(conexao);
+	    }
+
+        return nomesGinasios;
+    }
+	
+	public int consultarIdGinasio(String nomeGinasio) {
+        Connection conexao = null;
+        int idGinasio = -1; // Valor padrão para indicar que não encontrou o ginásio
+
+        try {
+            conexao = Conexao.conectaBanco();
+
+            String sql = "SELECT id FROM ginasio WHERE nome = ?";
+            PreparedStatement ps = conexao.prepareStatement(sql);
+            ps.setString(1, nomeGinasio);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                idGinasio = rs.getInt("id");
+            }
+
+        } catch (SQLException erro) {
+            System.out.println("Erro ao consultar o ID do ginásio: " + erro.toString());
+        } finally {
+            Conexao.fechaConexao(conexao);
+        }
+
+        return idGinasio;
+    }
 
 }

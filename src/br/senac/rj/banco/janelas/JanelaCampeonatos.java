@@ -21,6 +21,8 @@ public class JanelaCampeonatos {
 		janelaCampeonatos.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		janelaCampeonatos.setSize(600, 300); // Define tamanho da janela
 		
+		ConfiguracaoLogo.definirIcone(janelaCampeonatos);
+		
 		// Define o layout da janela
 		Container caixa = janelaCampeonatos.getContentPane();
 		caixa.setLayout(null);

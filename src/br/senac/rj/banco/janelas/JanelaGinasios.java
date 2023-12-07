@@ -21,6 +21,8 @@ public class JanelaGinasios {
 		janelaGinasios.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		janelaGinasios.setSize(600, 300); // Define tamanho da janela
 		
+		ConfiguracaoLogo.definirIcone(janelaGinasios);
+		
 		// Define o layout da janela
 		Container caixa = janelaGinasios.getContentPane();
 		caixa.setLayout(null);
