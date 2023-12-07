@@ -16,6 +16,7 @@ import br.senac.rj.banco.janelas.BackgroundPanel;
 import br.senac.rj.banco.janelas.HyperLinkInMenuBar;
 import br.senac.rj.banco.janelas.JanelaAtletas;
 import br.senac.rj.banco.janelas.JanelaCampeonatos;
+import br.senac.rj.banco.janelas.JanelaGinasios;
 
 public class TesteSwing {
 
@@ -91,7 +92,7 @@ public class TesteSwing {
 		
 		// Criar a janelas
 		JFrame janelaAtletas = JanelaAtletas.criarJanelaAtletas();
-//		JFrame janelaGinasios = JanelaGinasios.criarJanelaConta();
+		JFrame janelaGinasios = JanelaGinasios.criarJanelaGinasios();
 		JFrame janelaCampeonatos = JanelaCampeonatos.criarJanelaCampeonatos();
 		
 		// Adiciona ação para o item do menu
@@ -102,12 +103,12 @@ public class TesteSwing {
 		});
 		janelaPrincipal.setVisible(true);
 		
-//		menuGinasios.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent arg0) {
-//				janelaGinasios.setVisible(true);
-//			}
-//		});
-//		janelaPrincipal.setVisible(true);
+		menuGinasios.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				janelaGinasios.setVisible(true);
+			}
+		});
+		janelaPrincipal.setVisible(true);
 		
 		menuCampeonatos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
