@@ -74,8 +74,15 @@ public class JanelaAtletas {
 		botaoGravar.setEnabled(false);
 		janelaAtletas.add(botaoGravar);
 		JButton botaoLimpar = new JButton("Limpar");
-		botaoLimpar.setBounds(250, 200, 100, 20);
+		botaoLimpar.setBounds(150, 200, 100, 20);
 		janelaAtletas.add(botaoLimpar);
+		JButton botaoExcluir = new JButton("Excluir");
+		botaoExcluir.setBounds(250, 200, 100, 20);
+		botaoExcluir.setEnabled(false);
+		janelaAtletas.add(botaoExcluir);
+
+		// Restante do código ...
+
 		
 		// Define objeto atleta para pesquisar no banco de dados
 		Atleta atleta = new Atleta();
@@ -86,6 +93,7 @@ public class JanelaAtletas {
 				try {
 					int id = Integer.parseInt(jTextId.getText());
 					botaoGravar.setEnabled(true);
+					botaoExcluir.setEnabled(true);
 					String nome;
 					int idade;
 					double altura;
@@ -165,6 +173,31 @@ public class JanelaAtletas {
 				jTextId.requestFocus(); // Colocar o foco em um campo
 			}
 		});
+		
+		botaoExcluir.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        try {
+		            int id = Integer.parseInt(jTextId.getText());
+
+		            int resposta = JOptionPane.showConfirmDialog(janelaAtletas, "Deseja excluir este registro?", "Confirmação", JOptionPane.YES_NO_OPTION);
+		            if (resposta == JOptionPane.YES_OPTION) {
+		                if (atleta.consultarAtleta(id)) {
+		                    if (atleta.excluirAtleta(id)) {
+		                        JOptionPane.showMessageDialog(janelaAtletas, "Registro excluído com sucesso!");
+		                        // Limpar os campos ou fazer outras ações após a exclusão
+		                    } else {
+		                        JOptionPane.showMessageDialog(janelaAtletas, "Erro ao excluir o registro!");
+		                    }
+		                } else {
+		                    JOptionPane.showMessageDialog(janelaAtletas, "Registro não encontrado!");
+		                }
+		            }
+		        } catch (Exception erro) {
+		            JOptionPane.showMessageDialog(janelaAtletas, "Erro ao excluir o registro!");
+		        }
+		    }
+		});
+
 		return janelaAtletas;
 	}
 }

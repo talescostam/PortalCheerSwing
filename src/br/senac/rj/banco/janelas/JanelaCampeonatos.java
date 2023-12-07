@@ -75,8 +75,12 @@ public class JanelaCampeonatos {
 		botaoGravar.setEnabled(false);
 		janelaCampeonatos.add(botaoGravar);
 		JButton botaoLimpar = new JButton("Limpar");
-		botaoLimpar.setBounds(250, 200, 100, 20);
+		botaoLimpar.setBounds(200, 200, 100, 20);
 		janelaCampeonatos.add(botaoLimpar);
+		JButton botaoExcluir = new JButton("Excluir");
+		botaoExcluir.setBounds(350, 200, 100, 20);
+		botaoExcluir.setEnabled(false);
+		janelaCampeonatos.add(botaoExcluir);
 		
 		// Define objeto atleta para pesquisar no banco de dados
 		Campeonato campeonato = new Campeonato();
@@ -87,6 +91,7 @@ public class JanelaCampeonatos {
 				try {
 					int id = Integer.parseInt(jTextId.getText());
 					botaoGravar.setEnabled(true);
+					botaoExcluir.setEnabled(true);
 					String nome;
 					String categoria;
 					String divisao;
@@ -165,6 +170,30 @@ public class JanelaCampeonatos {
 				jTextId.requestFocus(); // Colocar o foco em um campo
 			}
 		});
+		
+		botaoExcluir.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        try {
+		            int id = Integer.parseInt(jTextId.getText());
+
+		            int resposta = JOptionPane.showConfirmDialog(janelaCampeonatos, "Deseja excluir este registro?", "Confirmação", JOptionPane.YES_NO_OPTION);
+		            if (resposta == JOptionPane.YES_OPTION) {
+		                if (campeonato.consultarCampeonato(id)) {
+		                    if (campeonato.excluirCampeonato(id)) {
+		                        JOptionPane.showMessageDialog(janelaCampeonatos, "Registro excluído com sucesso!");
+		                    } else {
+		                        JOptionPane.showMessageDialog(janelaCampeonatos, "Erro ao excluir o registro!");
+		                    }
+		                } else {
+		                    JOptionPane.showMessageDialog(janelaCampeonatos, "Registro não encontrado!");
+		                }
+		            }
+		        } catch (Exception erro) {
+		            JOptionPane.showMessageDialog(janelaCampeonatos, "Erro ao excluir o registro!");
+		        }
+		    }
+		});
+		
 		return janelaCampeonatos;
 	}
 }

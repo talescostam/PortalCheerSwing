@@ -53,22 +53,23 @@ public class Ginasio {
 		this.municipio = municipio;
 	}
 	
-	public boolean cadastrarGinasio(String nome, String estado, String municipio) {
+	public boolean cadastrarGinasio(int id, String nome, String estado, String municipio) {
 		// Define a conexão
 		Connection conexao = null;
 		try {
 			conexao = Conexao.conectaBanco();
 			
 			// Define a consulta
-			String sql = "insert into ginasio set nome=?, estado=?, municipio=?;";
+			String sql = "insert into ginasio (id, nome, estado, municipio) VALUES (?, ?, ?, ?);";
 			
 			// Prepara a consulta
 			PreparedStatement ps = conexao.prepareStatement(sql);
 			
 			// Define os parâmetros da consulta
-			ps.setString(1, nome); // Substitui o primeiro parâmetro da consulta pelo nome informado
-			ps.setString(2, estado); // Substitui o segundo parâmetro da consulta pelo estado informado
-			ps.setString(3, municipio); // Substitui o segundo parâmetro da consulta pelo município informado
+			ps.setInt(1, id); // Substitui o primeiro parâmetro da consulta pelo id informado
+			ps.setString(2, nome); // Substitui o primeiro parâmetro da consulta pelo nome informado
+			ps.setString(3, estado); // Substitui o segundo parâmetro da consulta pelo estado informado
+			ps.setString(4, municipio); // Substitui o segundo parâmetro da consulta pelo município informado
 			int totalRegistrosAfetados = ps.executeUpdate();
 			if (totalRegistrosAfetados == 0) {
 				System.out.println("Não foi feito o cadastro!!");
@@ -137,10 +138,10 @@ public class Ginasio {
 				PreparedStatement ps = conexao.prepareStatement(sql);
 				
 				// Define os parâmetros da atualização
-				ps.setString(1, nome);
-				ps.setString(2, estado);
-				ps.setString(3, municipio);
-				ps.setInt(4, id);
+				ps.setString(1, nome != null ? nome : this.nome);
+	            ps.setString(2, estado != null ? estado : this.estado);
+	            ps.setString(3, municipio != null ? municipio : this.municipio);
+	            ps.setInt(4, id);
 				int totalRegistrosAfetados = ps.executeUpdate();
 				if (totalRegistrosAfetados == 0)
 					System.out.println("Não foi feita a atualização!");
@@ -155,6 +156,33 @@ public class Ginasio {
 			}
 		}
 	}
+	
+	public boolean excluirGinasio(int id) {
+	    Connection conexao = null;
+	    try {
+	        conexao = Conexao.conectaBanco();
+
+	        String sql = "DELETE FROM ginasio WHERE id=?";
+
+	        PreparedStatement ps = conexao.prepareStatement(sql);
+
+	        ps.setInt(1, id);
+
+	        int totalRegistrosAfetados = ps.executeUpdate();
+	        if (totalRegistrosAfetados == 0) {
+	            System.out.println("Não foi possível excluir o registro!");
+	            return false;
+	        }
+	        System.out.println("Registro excluído com sucesso!");
+	        return true;
+	    } catch (SQLException erro) {
+	        System.out.println("Erro ao excluir o registro do Ginásio: " + erro.toString());
+	        return false;
+	    } finally {
+	        Conexao.fechaConexao(conexao);
+	    }
+	}
+
 
 
 }

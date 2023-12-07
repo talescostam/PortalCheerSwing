@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
-import br.senac.rj.banco.modelo.Campeonato;
+import br.senac.rj.banco.modelo.Ginasio;
 
 public class JanelaGinasios {
 	public static JFrame criarJanelaGinasios() {
@@ -75,11 +75,15 @@ public class JanelaGinasios {
 		botaoGravar.setEnabled(false);
 		janelaGinasios.add(botaoGravar);
 		JButton botaoLimpar = new JButton("Limpar");
-		botaoLimpar.setBounds(250, 200, 100, 20);
+		botaoLimpar.setBounds(200, 200, 100, 20);
 		janelaGinasios.add(botaoLimpar);
+		JButton botaoExcluir = new JButton("Excluir");
+		botaoExcluir.setBounds(350, 200, 100, 20);
+		botaoExcluir.setEnabled(false);
+		janelaGinasios.add(botaoExcluir);
 		
 		// Define objeto atleta para pesquisar no banco de dados
-		Campeonato campeonato = new Campeonato();
+		Ginasio ginasio = new Ginasio();
 		
 		// Define ações dos botões
 		botaoConsultar.addActionListener(new ActionListener() {
@@ -87,21 +91,22 @@ public class JanelaGinasios {
 				try {
 					int id = Integer.parseInt(jTextId.getText());
 					botaoGravar.setEnabled(true);
+					botaoExcluir.setEnabled(true);
 					String nome;
-					String categoria;
-					String divisao;
-					if (!campeonato.consultarCampeonato(id)) {
+					String estado;
+					String municipio;
+					if (!ginasio.consultarGinasio(id)) {
 						nome = "";
-						categoria = "";
-						divisao = "";
+						estado = "";
+						municipio = "";
 					} else {
-						nome = campeonato.getNome();
-						categoria = campeonato.getCategoria();
-						divisao = campeonato.getDivisao();
+						nome = ginasio.getNome();
+						estado = ginasio.getEstado();
+						municipio = ginasio.getMunicipio();
 					}
 		            jTextNome.setText(nome);
-		            jTextEstado.setText(categoria);
-		            jTextMunicipio.setText(divisao);
+		            jTextEstado.setText(estado);
+		            jTextMunicipio.setText(municipio);
 					
 					jTextId.setEnabled(false);
 					botaoConsultar.setEnabled(false);
@@ -126,20 +131,20 @@ public class JanelaGinasios {
 				if (resposta == JOptionPane.YES_OPTION) {
 					int id = Integer.parseInt(jTextId.getText());
 					String nome = jTextNome.getText();
-					String categoria = jTextNome.getText();
-					String divisao = jTextNome.getText();
+					String estado = jTextEstado.getText();
+					String municipio = jTextMunicipio.getText();
 					
 					if (nome.length() == 0) {
 						JOptionPane.showMessageDialog(janelaGinasios, "Preencha o campo nome");
 						jTextNome.requestFocus();
 					} else {
-						if (!campeonato.consultarCampeonato(id)) {
-							if (!campeonato.cadastrarCampeonato(id, nome, categoria, divisao))
+						if (!ginasio.consultarGinasio(id)) {
+							if (!ginasio.cadastrarGinasio(id, nome, estado, municipio))
 								JOptionPane.showMessageDialog(janelaGinasios, "Erro na inclusão do Atleta!");
 							else
 								JOptionPane.showMessageDialog(janelaGinasios, "Inclusão realizada!");
 						} else {
-							if (!campeonato.atualizarCampeonato(id, nome, categoria, divisao))
+							if (!ginasio.atualizarGinasio(id, nome, estado, municipio))
 								JOptionPane.showMessageDialog(janelaGinasios, "Erro na atualização do Atleta!");
 							else
 								JOptionPane.showMessageDialog(janelaGinasios, "Alteração realizada!");
@@ -165,6 +170,32 @@ public class JanelaGinasios {
 				jTextId.requestFocus(); // Colocar o foco em um campo
 			}
 		});
+		
+		botaoExcluir.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        try {
+		            int id = Integer.parseInt(jTextId.getText());
+		            
+		            int resposta = JOptionPane.showConfirmDialog(janelaGinasios, "Deseja excluir este registro?", "Confirmação", JOptionPane.YES_NO_OPTION);
+		            if (resposta == JOptionPane.YES_OPTION) {
+		                if (ginasio.consultarGinasio(id)) {
+		                    if (ginasio.excluirGinasio(id)) {
+		                        JOptionPane.showMessageDialog(janelaGinasios, "Registro excluído com sucesso!");
+		                        // Limpar os campos ou fazer outras ações após a exclusão
+		                    } else {
+		                        JOptionPane.showMessageDialog(janelaGinasios, "Erro ao excluir o registro!");
+		                    }
+		                } else {
+		                    JOptionPane.showMessageDialog(janelaGinasios, "Registro não encontrado!");
+		                }
+		            }
+		        } catch (Exception erro) {
+		            JOptionPane.showMessageDialog(janelaGinasios, "Erro ao excluir o registro!");
+		        }
+		    }
+		});
+		
 		return janelaGinasios;
 	}
+	
 }

@@ -160,4 +160,31 @@ public class Atleta {
 			}
 		}
 	}
+	
+	public boolean excluirAtleta(int id) {
+	    Connection conexao = null;
+	    try {
+	        conexao = Conexao.conectaBanco();
+
+	        String sql = "DELETE FROM atleta WHERE id=?";
+
+	        PreparedStatement ps = conexao.prepareStatement(sql);
+
+	        ps.setInt(1, id);
+
+	        int totalRegistrosAfetados = ps.executeUpdate();
+	        if (totalRegistrosAfetados == 0) {
+	            System.out.println("Não foi possível excluir o registro!");
+	            return false;
+	        }
+	        System.out.println("Registro excluído com sucesso!");
+	        return true;
+	    } catch (SQLException erro) {
+	        System.out.println("Erro ao excluir o registro do Atleta: " + erro.toString());
+	        return false;
+	    } finally {
+	        Conexao.fechaConexao(conexao);
+	    }
+	}
+
 }
